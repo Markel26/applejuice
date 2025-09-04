@@ -1,0 +1,179 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>تفاحة الحظ</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background-color: #8b3f24;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      direction: rtl;
+      text-align: center;
+    }
+
+    .logo {
+      margin: 20px 0;
+      max-width: 300px;
+      width: 80%;
+    }
+
+    .apples, .buttons, #gameContainer {
+      display: none;
+    }
+
+    .apples {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .apple {
+      width: 60px;
+      height: 60px;
+      background-color: red;
+      border-radius: 50%;
+      position: relative;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    /* الساق */
+    .apple::before {
+      content: "";
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      width: 6px;
+      height: 12px;
+      background: #3d2b1f;
+      border-radius: 3px;
+      transform: translateX(-50%);
+    }
+
+    /* الورقة */
+    .apple::after {
+      content: "";
+      position: absolute;
+      top: -8px;
+      left: 55%;
+      width: 12px;
+      height: 8px;
+      background: green;
+      border-radius: 50%;
+      transform: rotate(-20deg);
+    }
+
+    .apple.selected {
+      box-shadow: 0 0 20px gold, 0 0 40px gold, 0 0 60px gold;
+      transform: scale(1.2);
+    }
+
+    button {
+      margin: 5px;
+      padding: 10px 20px;
+      background-color: #550000;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #770000;
+    }
+
+    #authContainer {
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    #idInput {
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: none;
+      margin-bottom: 10px;
+      width: 200px;
+      text-align: center;
+    }
+
+    #errorMsg {
+      color: #ffdede;
+      margin-top: 5px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- الشعار -->
+  <img src="IMG_6957.PNG" alt="تفاحة الحظ" class="logo">
+
+  <!-- تسجيل الدخول -->
+  <div id="authContainer">
+    <h2>أدخل معرف اللاعب</h2>
+    <input type="text" id="idInput" placeholder="المعرف الخاص بك" maxlength="10" />
+    <br>
+    <button onclick="verificarID()">تسجيل الدخول</button>
+    <div id="errorMsg"></div>
+  </div>
+
+  <!-- الواجهة الرئيسية -->
+  <div id="gameContainer">
+    <h2>احصل على الإشارة 🍎</h2>
+    <div class="apples" id="apples">
+      <div class="apple"></div>
+      <div class="apple"></div>
+      <div class="apple"></div>
+      <div class="apple"></div>
+      <div class="apple"></div>
+    </div>
+
+    <div class="buttons" id="gameButtons">
+      <button onclick="showApple()">احصل على إشارة</button>
+      <button onclick="resetApples()">إعادة التعيين</button>
+    </div>
+  </div>
+
+  <script>
+    const apples = document.querySelectorAll('.apple');
+
+    function verificarID() {
+      const id = document.getElementById('idInput').value;
+      const errorMsg = document.getElementById('errorMsg');
+      const valid = /^13\d{8}$/.test(id); // يجب أن يبدأ بـ 13 + 8 أرقام
+
+      if (valid) {
+        document.getElementById('authContainer').style.display = 'none';
+        document.getElementById('gameContainer').style.display = 'block';
+        document.getElementById('apples').style.display = 'flex';
+        document.getElementById('gameButtons').style.display = 'block';
+        errorMsg.textContent = '';
+      } else {
+        errorMsg.textContent = 'معرّف غير صالح. يرجى إدخال رقم صحيح.';
+      }
+    }
+
+    function showApple() {
+      resetApples();
+      const randomIndex = Math.floor(Math.random() * apples.length);
+      apples[randomIndex].classList.add('selected');
+    }
+
+    function resetApples() {
+      apples.forEach(apple => apple.classList.remove('selected'));
+    }
+  </script>
+</body>
+</html>
